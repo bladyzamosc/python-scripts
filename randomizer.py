@@ -9,10 +9,26 @@ class Randomizer:
         self.path = path
 
     def randomize(self):
-        print(self.path)
-        print(self.file)
-        fullname = os.path.join(self.path, self.file)
-        print(fullname)
-        wb = openpyxl.load_workbook(fullname)
+        ws = self.active_sheet()
+        map = self.extract_values(ws)
+        print(map)
+
+    def active_sheet(self):
+        wb = self.open_ws()
         ws = wb.active
-        print(ws.cell(7, 8).value)
+        return ws
+
+    def open_ws(self):
+        fullname = os.path.join(self.path, self.file)
+        wb = openpyxl.load_workbook(fullname)
+        return wb
+
+    def extract_values(self, ws):
+        map = {}
+        for cell in ws['H']:
+            value = cell.value
+            if isinstance(value, int) and value is not None:
+                map[cell.row] = value
+            if cell.row > 1000:
+                break
+        return map

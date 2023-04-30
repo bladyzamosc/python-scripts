@@ -1,1 +1,1 @@
-%cd%/venv/Scripts/python random.py
+%cd%/venv/Scripts/python draw_records.py
