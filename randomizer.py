@@ -45,18 +45,20 @@ class Randomizer:
         random.shuffle(rest_elements)
         rest_elements = rest_elements[0:rest_number]
         draw = wb.create_sheet("Losowanie")
-        mc = ws.max_column
+        mc = ws.max_column + 1
 
         row_new = 1
         for t in top_elements:
-            for j in range(1, mc + 1):
+            for j in range(1, mc):
                 cell_from = ws.cell(row=t[0], column=j)
                 draw.cell(row=row_new, column=j).value = cell_from.value
+            draw.cell(row=row_new, column=(mc + 1)).value = "TOP"
             row_new = row_new + 1
         for t in rest_elements:
-            for j in range(1, mc + 1):
+            for j in range(1, mc):
                 cell_from = ws.cell(row=t[0], column=j)
                 draw.cell(row=row_new, column=j).value = cell_from.value
+            draw.cell(row=row_new, column=(mc + 1)).value = "RANDOM"
             row_new = row_new + 1
         wb.save(self.file)
 
