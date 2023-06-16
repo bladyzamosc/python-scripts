@@ -1,6 +1,9 @@
+import math
 import random
 
 import openpyxl
+
+CONST_60 = 60
 
 ONE_HUNDRED = 100
 
@@ -16,10 +19,6 @@ MAX_VALUES = 1000
 
 CELL_L = 'L'
 
-CELL_K = 'K'
-
-CELL_M = 'M'
-
 
 class Randomizer:
     def __init__(self, file):
@@ -30,20 +29,23 @@ class Randomizer:
     def randomize(self):
         self.open_and_init()
         vals = self.extract_values()
-        if len(vals) < TOP_3_PERCENT + TOP_3_PERCENT:
+        if len(vals) < TOP_3_MIN + REST_2_MIN:
             top_elements = vals.items()
             rest_elements = []
         else:
-            top3 = round(len(vals) * TOP_3_PERCENT / ONE_HUNDRED)
-            print("-------", len(vals))
-            top_number = TOP_3_MIN if TOP_3_MIN > top3 else top3
-            print(top3, " ", top_number, "  ", len(vals) * TOP_3_PERCENT / ONE_HUNDRED)
-            rest2 = round(len(vals) * REST_2_PERCENT / ONE_HUNDRED)
-            rest_number = REST_2_MIN if REST_2_MIN > rest2 else rest2
-            print(rest2, " ", rest_number, "  ", len(vals) * REST_2_PERCENT / ONE_HUNDRED, )
+            rest_number = 1
+            top_number = 2
+            if len(vals) > CONST_60:
+                top3 = math.ceil(len(vals) * TOP_3_PERCENT / ONE_HUNDRED)
+                top_number = TOP_3_MIN if TOP_3_MIN > top3 else top3
+                rest2 = math.ceil(len(vals) * REST_2_PERCENT / ONE_HUNDRED)
+                rest_number = REST_2_MIN if REST_2_MIN > rest2 else rest2
+            print(len(vals), " - t:", top_number, " - r:", rest_number)
             sorted_values = sorted(vals.items(), key=lambda x: x[1], reverse=True)
             top_elements = sorted_values[0:top_number]
-            rest_elements = sorted_values[top_number - 1:len(sorted_values)]
+            rest_elements = sorted_values[top_number:len(sorted_values)]
+            print("top: ", top_elements)
+            print("rest: ", rest_elements)
             random.shuffle(rest_elements)
             rest_elements = rest_elements[0:rest_number]
 
